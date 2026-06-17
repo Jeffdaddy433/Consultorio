@@ -315,6 +315,20 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .btn-warning:hover { background: #a06311; }
 .btn-primary { background: var(--primary); color: #ffffff; }
 .btn-primary:hover { background: #134d87; }
+.btn:disabled {
+  background: #d6d6d6 !important;
+  color: #8a8a8a !important;
+  border: 1px solid #c0c0c0 !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
+.btn:disabled:hover {
+  background: #d6d6d6 !important;
+  color: #8a8a8a !important;
+  border: 1px solid #c0c0c0 !important;
+}
 
 @media (max-width: 992px) {
   .cards-row { grid-template-columns: 1fr; }
@@ -643,9 +657,19 @@ let baseDatosPacientesMemoria = [];
 // INICIALIZACIÓN DE INTERFAZ DEL DASHBOARD
 // ===================================================
 document.addEventListener('DOMContentLoaded', () => {
-  const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const opcionesFecha = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+
   const fechaActual = new Intl.DateTimeFormat('es-ES', opcionesFecha).format(new Date());
-  document.getElementById('fecha-titulo').textContent = `Buenos días — ${fechaActual.charAt(0).toUpperCase() + fechaActual.slice(1)}`;
+
+  document.getElementById('fecha-titulo').textContent =
+    `Buenos días — ${fechaActual.charAt(0).toUpperCase() + fechaActual.slice(1)}`;
+
+  restablecerFormularioInicial();
 });
 
 function setActive(el) {
