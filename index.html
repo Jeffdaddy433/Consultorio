@@ -6,6 +6,35 @@
 <title>MediSys — ERP y Gestión Clínica</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
+/* ===== MODAL ===== */
+.modal-card {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Necesario para bordes redondeados */
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: scroll;   /* ← FORZAR scroll siempre visible */
+  flex: 1;
+  max-height: calc(85vh - 120px); /* Ajusta según header+footer (~120px) */
+  min-height: 200px;    /* Para que tenga altura aunque el contenido sea corto */
+}
+
+/* Personalizar la barra (opcional) */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background: var(--bg-body);
+  border-radius: 4px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: #b5b5b5;
+  border-radius: 4px;
+}
+/* ========== ESTILOS BASE ========== */
 :root {
   --primary: #185FA5;
   --primary-light: #E6F1FB;
@@ -21,46 +50,174 @@
   --info: #378ADD;
   --transition-speed: 0.2s;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-body); color: var(--text-main); }
 
+/* ========== LOGIN ========== */
+#login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #185FA5 0%, #0d3b66 100%);
+  padding: 20px;
+}
+.login-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.login-card .logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.login-card .logo i {
+  font-size: 48px;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 16px;
+  border-radius: 16px;
+}
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin: 16px 0 8px;
+  color: var(--text-main);
+}
+.login-card p {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.login-card .form-group {
+  margin-bottom: 16px;
+}
+.login-card label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.login-card .form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition-speed);
+}
+.login-card .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.login-card .btn-login {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+.login-card .btn-login:hover {
+  background: #134d87;
+}
+.login-card .error-msg {
+  color: var(--danger);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 12px;
+  display: none;
+}
+.login-card .roles-help {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--bg-body);
+  border-radius: 8px;
+  font-size: 13px;
+}
+.login-card .roles-help b {
+  color: var(--text-main);
+}
+.login-card .roles-help .role-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.login-card .roles-help .role-item:last-child {
+  border-bottom: none;
+}
+
+/* ========== APP ========== */
+#app-screen {
+  display: none;
+  height: 100vh;
+  overflow: hidden;
+}
 .app { display: flex; height: 100vh; overflow: hidden; }
 
 /* SIDEBAR */
 .sidebar {
-  width: 240px; min-width: 240px;
+  width: 240px;
+  min-width: 240px;
   background: var(--bg-surface);
   border-right: 0.5px solid var(--border-color);
-  display: flex; flex-direction: column;
-  transition: transform var(--transition-speed);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  overflow-y: auto;
 }
 .sidebar-logo {
   padding: 16px 20px;
   border-bottom: 0.5px solid var(--border-color);
-  display: flex; align-items: center; gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .logo-icon {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   background: var(--primary);
   border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--primary-light); font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-light);
+  font-size: 20px;
 }
 .logo-text { font-size: 15px; font-weight: 600; line-height: 1.2; }
 .logo-sub { font-size: 11px; color: var(--text-light); }
 
 .nav { flex: 1; padding: 12px 0; overflow-y: auto; }
 .nav-section-label {
-  font-size: 10px; font-weight: 600; color: var(--text-light);
-  text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   padding: 16px 20px 8px;
 }
 .nav-item {
-  display: flex; align-items: center; gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 10px 20px;
-  font-size: 13.5px; color: var(--text-muted);
-  cursor: pointer; position: relative;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
   transition: all var(--transition-speed);
   user-select: none;
 }
@@ -68,9 +225,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 500; }
 .nav-item.active i { color: var(--primary); }
 .nav-item.active::before {
-  content: ''; position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px; background: var(--primary);
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary);
   border-radius: 0 4px 4px 0;
 }
 .nav-item i { font-size: 18px; color: var(--text-light); transition: color var(--transition-speed); }
@@ -82,10 +243,14 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
 .submenu-item {
-  display: flex; align-items: center; gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 20px 8px 50px;
-  font-size: 13px; color: var(--text-muted);
-  cursor: pointer; transition: background var(--transition-speed);
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition-speed);
 }
 .submenu-item:hover { background: var(--bg-body); color: var(--text-main); }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
@@ -93,13 +258,22 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .sidebar-footer {
   padding: 16px 20px;
   border-top: 0.5px solid var(--border-color);
-  display: flex; align-items: center; gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .avatar {
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--primary-light);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600; color: var(--primary); flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  flex-shrink: 0;
 }
 .footer-info { flex: 1; overflow: hidden; }
 .footer-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -107,51 +281,106 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .footer-icon { font-size: 18px; color: var(--text-light); cursor: pointer; transition: color var(--transition-speed); }
 .footer-icon:hover { color: var(--danger); }
 
-/* MAIN */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+/* OVERLAY */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sidebar-overlay.active { display: block; opacity: 1; }
 
+/* MAIN */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 .topbar {
-  height: 60px; background: var(--bg-surface);
+  height: 60px;
+  background: var(--bg-surface);
   border-bottom: 0.5px solid var(--border-color);
-  display: flex; align-items: center;
-  padding: 0 28px; gap: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
 }
 .topbar-title { font-size: 16px; font-weight: 500; flex: 1; }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
-
 .tb-btn {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background: transparent;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: var(--text-muted); font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 18px;
   transition: all var(--transition-speed);
 }
 .tb-btn:hover { background: var(--bg-body); color: var(--primary); border-color: var(--primary); }
-
+.btn-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.btn-hamburger:hover { color: var(--primary); }
 .status-dot {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
   padding: 6px 12px;
   border: 1px solid var(--border-color);
   border-radius: 20px;
   background: var(--bg-surface);
 }
-.dot-green { width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex-shrink: 0; box-shadow: 0 0 0 2px rgba(99, 153, 34, 0.2); }
-
-.content { flex: 1; overflow-y: auto; padding: 28px; }
-
+.dot-green {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(99,153,34,0.2);
+}
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+}
 .page-header { margin-bottom: 24px; }
 .page-header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
 .page-header p { font-size: 14px; color: var(--text-light); margin-top: 4px; }
 
-/* METRICS */
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
-.metric-card { 
-  background: var(--bg-surface); 
+/* DASHBOARD */
+#vista-dashboard { display: block; }
+#vista-pacientes { display: none; }
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.metric-card {
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 12px; 
+  border-radius: 12px;
   padding: 18px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
   transition: transform var(--transition-speed), box-shadow var(--transition-speed);
@@ -159,16 +388,21 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 .metric-label { font-size: 12px; color: var(--text-light); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 .metric-label i { font-size: 16px; color: var(--primary); }
-.metric-value { font-size: 26px; font-weight: 600; }
+.metric-value { font-size: 24px; font-weight: 600; }
 .metric-change { font-size: 12px; color: var(--success); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
 .metric-change.down { color: var(--danger); }
 
-/* PANELS */
-.cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
 .panel {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 12px; padding: 20px;
+  border-radius: 12px;
+  padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -176,13 +410,14 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .panel-link { font-size: 13px; color: var(--primary); cursor: pointer; font-weight: 500; }
 .panel-link:hover { text-decoration: underline; }
 
-/* APPOINTMENTS */
-.appointment-item {
-  display: flex; align-items: center; gap: 14px;
+#agenda-container .appointment-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   padding: 12px 0;
   border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-.appointment-item:last-child { border-bottom: none; padding-bottom: 0; }
+#agenda-container .appointment-item:last-child { border-bottom: none; padding-bottom: 0; }
 .appt-time { font-size: 12px; font-weight: 500; color: var(--text-light); width: 48px; flex-shrink: 0; text-align: right; }
 .appt-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .appt-info { flex: 1; }
@@ -193,14 +428,22 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .badge-green { background: #EAF3DE; color: var(--success); }
 .badge-amber { background: #FAEEDA; color: var(--warning); }
 
-/* QUICK ACTIONS */
-.quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 .qa-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   padding: 16px 10px;
   border: 1px solid var(--border-color);
-  border-radius: 10px; background: transparent;
-  cursor: pointer; transition: all var(--transition-speed);
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-speed);
   text-align: center;
 }
 .qa-btn:hover { background: var(--primary-light); border-color: var(--primary); }
@@ -208,436 +451,626 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 .qa-btn:hover i { transform: scale(1.1); }
 .qa-btn span { font-size: 12px; font-weight: 500; color: var(--text-muted); line-height: 1.3; }
 
-/* SUBPANTALLA FLOTANTE CORREGIDA */
+/* PACIENTES */
+.pacientes-container { display: flex; flex-direction: column; gap: 20px; }
+.paciente-detalle,
+#form-crear-paciente {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  max-height: none !important;
+  overflow-y: visible !important;
+  height: auto !important;
+}
+.paciente-detalle .grid-paciente,
+#form-crear-paciente .grid-paciente {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+.paciente-detalle .campo,
+#form-crear-paciente .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.paciente-detalle .campo label,
+#form-crear-paciente .campo label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.paciente-detalle .campo .valor {
+  font-size: 14px;
+  padding: 6px 0;
+  color: var(--text-main);
+}
+#form-crear-paciente .campo .form-control {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+  font-family: inherit;
+  width: 100%;
+}
+#form-crear-paciente .campo .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+#form-crear-paciente .campo textarea.form-control {
+  resize: vertical;
+  min-height: 60px;
+}
+.paciente-detalle .campo.full-width,
+#form-crear-paciente .campo.full-width {
+  grid-column: span 2;
+}
+.paciente-detalle .seccion-titulo,
+#form-crear-paciente .seccion-titulo {
+  grid-column: span 2;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  padding-top: 12px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.paciente-detalle .seccion-titulo:first-of-type,
+#form-crear-paciente .seccion-titulo:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+.btn-guardar-historial {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background var(--transition-speed);
+}
+.btn-guardar-historial:hover { background: #134d87; }
+
+#form-crear-paciente .acciones-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+.citas-lista {
+  margin-top: 24px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+.citas-lista h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+.citas-lista .cita-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  flex-wrap: wrap;
+}
+.citas-lista .cita-item .fecha-hora {
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 120px;
+}
+.citas-lista .cita-item .estado {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+.citas-lista .cita-item .estado.cumplida { background: #d4edda; color: #155724; }
+.citas-lista .cita-item .estado.no-cumplida { background: #f8d7da; color: #721c24; }
+.citas-lista .cita-item .estado.pendiente { background: #fff3cd; color: #856404; }
+.citas-lista .cita-item button {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+.citas-lista .cita-item button:hover { background: var(--primary-light); }
+
+/* MODAL */
 .modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(26, 26, 26, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26,26,26,0.4);
   backdrop-filter: blur(3px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; opacity: 0; pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity var(--transition-speed) ease;
 }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-
 .modal-card {
   background: var(--bg-surface);
-  border-radius: 14px; width: 100%; max-width: 680px;
-  max-height: 80vh;
-  display: flex; flex-direction: column;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 12px 36px rgba(0,0,0,0.12);
   border: 1px solid var(--border-color);
   transform: translateY(-20px);
   transition: transform var(--transition-speed) ease;
   overflow: hidden;
+  margin: 0 16px;
 }
 .modal-overlay.open .modal-card { transform: translateY(0); }
-
 .modal-header {
-  padding: 18px 24px;
+  padding: 16px 20px;
   border-bottom: 0.5px solid var(--border-color);
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-shrink: 0;
 }
-.modal-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; color: var(--primary); }
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary);
+}
 .modal-title i { font-size: 20px; }
-.modal-close { background: none; border: none; font-size: 20px; color: var(--text-light); cursor: pointer; display: flex; align-items: center; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-light);
+  cursor: pointer;
+}
 .modal-close:hover { color: var(--danger); }
 
-.modal-card form {
-  display: flex;
-  flex-direction: column;
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
   flex: 1;
-  overflow: hidden;
+  min-height: 200px;
 }
+.modal-body::-webkit-scrollbar { width: 6px; }
+.modal-body::-webkit-scrollbar-track { background: var(--bg-body); border-radius: 4px; }
+.modal-body::-webkit-scrollbar-thumb { background: #b5b5b5; border-radius: 4px; }
 
-.modal-body { 
-  padding: 24px; 
-  overflow-y: scroll;
-  flex: 1;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
-
-.modal-body::-webkit-scrollbar {
-  width: 8px;
-}
-.modal-body::-webkit-scrollbar-track {
-  background: var(--bg-body);
-  border-radius: 4px;
-}
-.modal-body::-webkit-scrollbar-thumb {
-  background: #b5b5b5;
-  border-radius: 4px;
-  border: 1px solid var(--bg-body);
-}
-.modal-body::-webkit-scrollbar-thumb:hover {
-  background: var(--text-light);
-}
-
-.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
 .form-group.full-width { grid-column: span 2; }
-
-.form-group label { font-size: 12.5px; font-weight: 500; color: var(--text-muted); }
-.form-group label span { color: var(--danger); margin-left: 2px; }
-
-.form-control {
-  padding: 9px 12px; border: 1px solid var(--border-color);
-  border-radius: 8px; font-size: 13.5px; background: var(--bg-surface);
-  color: var(--text-main); outline: none; transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-  font-family: inherit;
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
 }
-.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
-.form-control::placeholder { color: #b5b5b5; }
-
+.form-group label span { color: var(--danger); margin-left: 2px; }
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 13.5px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+  font-family: inherit;
+  width: 100%;
+}
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.form-control.error { border-color: var(--danger); }
+.form-section-title {
+  grid-column: span 2;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.form-section-title i { font-size: 16px; }
 .input-with-lookup { display: flex; gap: 6px; }
 .input-with-lookup .form-control { flex: 1; }
 .btn-lookup {
-  width: 40px; background: var(--primary); color: #ffffff;
-  border: none; border-radius: 8px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  width: 40px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   transition: background var(--transition-speed);
 }
 .btn-lookup:hover { background: #134d87; }
 
 .modal-footer {
-  padding: 16px 24px; border-top: 0.5px solid var(--border-color);
-  display: flex; justify-content: flex-end; gap: 12px; background: #fafafa;
+  padding: 14px 20px;
+  border-top: 0.5px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #fafafa;
   border-radius: 0 0 14px 14px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .btn {
-  padding: 9px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 500;
-  cursor: pointer; border: 1px solid transparent; transition: all var(--transition-speed);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed);
 }
-.btn-secondary { background: var(--bg-surface); color: var(--text-muted); border-color: var(--border-color); }
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
 .btn-secondary:hover { background: var(--bg-body); color: var(--text-main); }
-.btn-warning { background: var(--warning); color: #ffffff; }
+.btn-warning { background: var(--warning); color: #fff; }
 .btn-warning:hover { background: #a06311; }
-.btn-primary { background: var(--primary); color: #ffffff; }
+.btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: #134d87; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #8a2424; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #4f7a1b; }
 .btn:disabled {
   background: #d6d6d6 !important;
   color: #8a8a8a !important;
   border: 1px solid #c0c0c0 !important;
   cursor: not-allowed !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
+}
+#lista-citas-container {
+  margin-top: 20px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+  display: none;
+}
+#lista-citas-container.visible { display: block; }
+#lista-citas-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+#lista-citas-container th {
+  text-align: left;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+#lista-citas-container td {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+#lista-citas-container .cita-check { width: 30px; text-align: center; }
+#lista-citas-container .acciones-citas {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
-.btn:disabled:hover {
-  background: #d6d6d6 !important;
-  color: #8a8a8a !important;
-  border: 1px solid #c0c0c0 !important;
-}
-
+/* RESPONSIVE */
 @media (max-width: 992px) {
   .cards-row { grid-template-columns: 1fr; }
+  .content { padding: 16px; }
 }
 @media (max-width: 768px) {
-  .sidebar { position: fixed; transform: translateX(-100%); z-index: 100; height: 100%; }
-  .sidebar.mobile-open { transform: translateX(0); }
-  .topbar { padding: 0 16px; }
-  .content { padding: 16px; }
-  .quick-actions { grid-template-columns: repeat(2, 1fr); }
-  .modal-card { max-height: 90vh; margin: 12px; }
-}
-@media (max-width: 576px) {
-  .form-grid { grid-template-columns: 1fr; }
+  .btn-hamburger { display: block; }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    width: 280px;
+    min-width: unset;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    border-right: none;
+    border-radius: 0 12px 12px 0;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.active { display: block; }
+  .topbar { padding: 0 12px; gap: 8px; }
+  .topbar-title { font-size: 14px; }
+  .status-dot { display: none; }
+  .content { padding: 12px; }
+  .paciente-detalle .grid-paciente,
+  #form-crear-paciente .grid-paciente {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .paciente-detalle .campo.full-width,
+  #form-crear-paciente .campo.full-width {
+    grid-column: span 1;
+  }
+  .paciente-detalle .seccion-titulo,
+  #form-crear-paciente .seccion-titulo {
+    grid-column: span 1;
+  }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
   .form-group.full-width { grid-column: span 1; }
+  .form-section-title { grid-column: span 1; }
+  .quick-actions {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .qa-btn { padding: 12px 8px; }
+  .qa-btn i { font-size: 18px; }
+  .qa-btn span { font-size: 11px; }
+  .modal-card { max-height: 90vh; margin: 10px; }
+  .modal-body { padding: 16px; }
+  .modal-footer { flex-wrap: wrap; justify-content: center; }
+  .btn { padding: 6px 14px; font-size: 12px; }
+  .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .metric-value { font-size: 20px; }
+}
+@media (max-width: 480px) {
+  .quick-actions { grid-template-columns: repeat(2, 1fr); }
+  .metrics { grid-template-columns: 1fr; }
+  .sidebar { width: 100%; border-radius: 0; }
+  .page-header h1 { font-size: 18px; }
+  .page-header p { font-size: 13px; }
+  .panel { padding: 14px; }
 }
 </style>
 </head>
 <body>
 
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon"><i class="ti ti-building-hospital"></i></div>
-      <div>
-        <div class="logo-text">MediSys ERP</div>
-        <div class="logo-sub">Gestión Clínica Integral</div>
-      </div>
+<!-- =============================== -->
+<!-- LOGIN SCREEN                    -->
+<!-- =============================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="logo">
+      <i class="ti ti-building-hospital"></i>
     </div>
-
-    <nav class="nav">
-      <div class="nav-section-label">Principal</div>
-      <div class="nav-item active" onclick="setActive(this)">
-        <i class="ti ti-layout-dashboard"></i> Panel de Control
+    <h1>MediSys ERP</h1>
+    <p>Gestión Clínica Integral</p>
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" id="login-user" class="form-control" placeholder="admin, medico, recepcion" value="admin">
       </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-calendar-time"></i> Agenda
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" class="form-control" placeholder="••••••••" value="1234">
       </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-users"></i> Pacientes
-      </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-notes"></i> Historia Clínica
-      </div>
-
-      <div class="nav-section-label">Módulos Administrativos</div>
-      <div class="nav-item open" id="nav-crear" onclick="toggleSubmenu('sub-crear', 'nav-crear')">
-        <i class="ti ti-database"></i> Catálogos
-        <i class="ti ti-chevron-down chevron"></i>
-      </div>
-      <div class="submenu open" id="sub-crear">
-        <div class="submenu-item"><span class="dot"></span><i class="ti ti-pill"></i> Medicamentos</div>
-        <div class="submenu-item"><span class="dot"></span><i class="ti ti-activity"></i> Servicios</div>
-        <div class="submenu-item"><span class="dot"></span><i class="ti ti-truck"></i> Proveedores</div>
-      </div>
-
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-calculator"></i> Contabilidad
-      </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-file-invoice"></i> Facturación
-      </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-chart-pie"></i> Análisis y Reportes
-      </div>
-      <div class="nav-item" onclick="setActive(this)">
-        <i class="ti ti-settings"></i> Configuración
-      </div>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="avatar">AD</div>
-      <div class="footer-info">
-        <div class="footer-name">Administrador</div>
-        <div class="footer-role">Estación Principal</div>
-      </div>
-      <i class="ti ti-logout footer-icon" title="Cerrar sesión"></i>
+      <button type="submit" class="btn-login">Ingresar</button>
+      <div id="login-error" class="error-msg">Usuario o contraseña incorrectos</div>
+    </form>
+    <div class="roles-help">
+      <b>Credenciales de prueba:</b>
+      <div class="role-item"><span>👑 Administrador</span> <span>admin / 1234</span></div>
+      <div class="role-item"><span>🩺 Médico</span> <span>medico / 1234</span></div>
+      <div class="role-item"><span>📋 Recepción</span> <span>recepcion / 1234</span></div>
     </div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar">
-      <div class="topbar-title">Visión General</div>
-      <div class="topbar-right">
-        <div class="status-dot">
-          <span class="dot-green"></span> Servidor activo · 3 estaciones
-        </div>
-        <button class="tb-btn" title="Notificaciones"><i class="ti ti-bell"></i></button>
-        <button class="tb-btn" title="Buscar"><i class="ti ti-search"></i></button>
-      </div>
-    </header>
-
-    <div class="content">
-      <div class="page-header">
-        <h1 id="fecha-titulo">Cargando...</h1>
-        <p>Resumen de actividad y métricas financieras</p>
-      </div>
-
-      <div class="metrics">
-        <div class="metric-card">
-          <div class="metric-label"><i class="ti ti-calendar-event"></i> Citas hoy</div>
-          <div class="metric-value">12</div>
-          <div class="metric-change"><i class="ti ti-trending-up"></i> 2 vs ayer</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label"><i class="ti ti-users"></i> Pacientes activos</div>
-          <div class="metric-value">348</div>
-          <div class="metric-change"><i class="ti ti-trending-up"></i> 5 este mes</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label"><i class="ti ti-file-dollar"></i> Facturado (mes)</div>
-          <div class="metric-value">$4,210</div>
-          <div class="metric-change"><i class="ti ti-trending-up"></i> 8% vs anterior</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label"><i class="ti ti-clock"></i> Cuentas por cobrar</div>
-          <div class="metric-value">$620</div>
-          <div class="metric-change down"><i class="ti ti-alert-circle"></i> 3 facturas abiertas</div>
-        </div>
-      </div>
-
-      <div class="cards-row">
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Agenda del día</span>
-            <span class="panel-link">Ver calendario completo &rarr;</span>
-          </div>
-          <div class="appointment-item">
-            <span class="appt-time">09:00</span>
-            <span class="appt-dot" style="background: var(--info)"></span>
-            <div class="appt-info">
-              <div class="appt-name">María Gutiérrez</div>
-              <div class="appt-type">Consulta general</div>
-            </div>
-            <span class="appt-badge badge-blue">Confirmada</span>
-          </div>
-          <div class="appointment-item">
-            <span class="appt-time">10:30</span>
-            <span class="appt-dot" style="background: var(--success)"></span>
-            <div class="appt-info">
-              <div class="appt-name">Carlos Ramos</div>
-              <div class="appt-type">Control laboratorio</div>
-            </div>
-            <span class="appt-badge badge-green">Atendida</span>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">Acciones rápidas</span>
-          </div>
-          <div class="quick-actions">
-            <button class="qa-btn" onclick="openModal('modal-cita')">
-              <i class="ti ti-calendar-plus"></i>
-              <span>Nueva cita</span>
-            </button>
-            <button class="qa-btn">
-              <i class="ti ti-user-plus"></i>
-              <span>Nuevo paciente</span>
-            </button>
-            <button class="qa-btn">
-              <i class="ti ti-notes"></i>
-              <span>Abrir historia</span>
-            </button>
-            <button class="qa-btn">
-              <i class="ti ti-file-plus"></i>
-              <span>Emitir factura</span>
-            </button>
-            <button class="qa-btn">
-              <i class="ti ti-report-money"></i>
-              <span>Registrar pago</span>
-            </button>
-            <button class="qa-btn">
-              <i class="ti ti-chart-bar"></i>
-              <span>Ver ROI</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+  </div>
 </div>
 
+<!-- =============================== -->
+<!-- APP SCREEN                      -->
+<!-- =============================== -->
+<div id="app-screen">
+  <div class="app">
+    <!-- OVERLAY -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="cerrarSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon"><i class="ti ti-building-hospital"></i></div>
+        <div><div class="logo-text">MediSys ERP</div><div class="logo-sub">Gestión Clínica Integral</div></div>
+      </div>
+      <nav class="nav" id="nav-sidebar">
+        <!-- Los items del menú se cargan dinámicamente con JavaScript -->
+      </nav>
+      <div class="sidebar-footer">
+        <div class="avatar" id="user-avatar">AD</div>
+        <div class="footer-info">
+          <div class="footer-name" id="user-name">Administrador</div>
+          <div class="footer-role" id="user-role">admin</div>
+        </div>
+        <i class="ti ti-logout footer-icon" title="Cerrar sesión" onclick="logout()"></i>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="topbar">
+        <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Abrir menú">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <div class="topbar-title" id="topbar-title">Visión General</div>
+        <div class="topbar-right">
+          <div class="status-dot"><span class="dot-green"></span> Servidor activo · 3 estaciones</div>
+          <button class="tb-btn" title="Notificaciones"><i class="ti ti-bell"></i></button>
+          <button class="tb-btn" title="Buscar"><i class="ti ti-search"></i></button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- DASHBOARD -->
+        <div id="vista-dashboard">
+          <div class="page-header">
+            <h1 id="fecha-titulo">Cargando...</h1>
+            <p>Resumen de actividad y métricas financieras</p>
+          </div>
+          <div class="metrics">
+            <div class="metric-card"><div class="metric-label"><i class="ti ti-calendar-event"></i> Citas hoy</div><div class="metric-value" id="metric-citas-hoy">0</div><div class="metric-change"><i class="ti ti-trending-up"></i> 2 vs ayer</div></div>
+            <div class="metric-card"><div class="metric-label"><i class="ti ti-users"></i> Pacientes activos</div><div class="metric-value" id="metric-pacientes">0</div><div class="metric-change"><i class="ti ti-trending-up"></i> 5 este mes</div></div>
+            <div class="metric-card"><div class="metric-label"><i class="ti ti-file-dollar"></i> Facturado (mes)</div><div class="metric-value" id="metric-facturado">$0.00</div><div class="metric-change"><i class="ti ti-trending-up"></i> 8% vs anterior</div></div>
+            <div class="metric-card"><div class="metric-label"><i class="ti ti-clock"></i> Cuentas por cobrar</div><div class="metric-value">$620</div><div class="metric-change down"><i class="ti ti-alert-circle"></i> 3 facturas abiertas</div></div>
+          </div>
+          <div class="cards-row">
+            <div class="panel">
+              <div class="panel-header"><span class="panel-title">Agenda del día</span><span class="panel-link">Ver calendario completo &rarr;</span></div>
+              <div id="agenda-container"><div class="appointment-item" style="justify-content:center; color: var(--text-light);">Cargando...</div></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header"><span class="panel-title">Acciones rápidas</span></div>
+              <div class="quick-actions">
+                <button class="qa-btn" onclick="openModal('modal-cita')"><i class="ti ti-calendar-plus"></i><span>Nueva cita</span></button>
+                <button class="qa-btn" onclick="cambiarVista('pacientes')"><i class="ti ti-user-plus"></i><span>Pacientes</span></button>
+                <button class="qa-btn"><i class="ti ti-notes"></i><span>Abrir historia</span></button>
+                <button class="qa-btn"><i class="ti ti-file-plus"></i><span>Emitir factura</span></button>
+                <button class="qa-btn"><i class="ti ti-report-money"></i><span>Registrar pago</span></button>
+                <button class="qa-btn"><i class="ti ti-chart-bar"></i><span>Ver ROI</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PACIENTES -->
+        <div id="vista-pacientes">
+          <div class="page-header">
+            <h1><i class="ti ti-users"></i> Gestión de Pacientes</h1>
+            <p>Buscar paciente por cédula o nombre (aproximado).</p>
+          </div>
+          <div class="pacientes-container">
+            <div style="position: relative; width: 100%; max-width: 500px; margin-bottom: 10px;">
+              <input type="text" id="buscar-paciente" placeholder="Buscar por cédula o nombre..." 
+                     style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 15px;"
+                     oninput="buscarPacientesAutocomplete(this.value)"
+                     onfocus="buscarPacientesAutocomplete(this.value, true)">
+              <div id="sugerencias-pacientes" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 8px; max-height: 300px; overflow-y: auto; display: none; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              </div>
+            </div>
+
+            <div id="form-crear-paciente" style="display: none;">
+              <h3 style="font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 16px;">
+                <i class="ti ti-user-plus"></i> Nuevo Paciente
+              </h3>
+              <div class="grid-paciente">
+                <div class="seccion-titulo"><i class="ti ti-user"></i> Datos de Identificación y Contacto</div>
+                <div class="campo"><label>Cédula / RUC (opcional)</label>
+<input type="text" id="nuevo-identificacion" class="form-control" placeholder="Ej. 1722600390 (opcional)"></div>
+                <div class="campo"><label>Tipo</label><select id="nuevo-tipo" class="form-control"><option value="natural">Natural</option><option value="juridica">Jurídica</option><option value="rimpe-popular">RIMPE Popular</option><option value="rimpe-emprendedor">RIMPE Emprendedor</option></select></div>
+                <div class="campo"><label>Apellidos <span style="color:var(--danger);">*</span></label><input type="text" id="nuevo-apellidos" class="form-control" placeholder="Ej. Sánchez"></div>
+                <div class="campo"><label>Nombres <span style="color:var(--danger);">*</span></label><input type="text" id="nuevo-nombres" class="form-control" placeholder="Ej. Jefferson Alfonso"></div>
+                <div class="campo"><label>Teléfono 1 <span style="color:var(--danger);">*</span></label><input type="tel" id="nuevo-telefono" class="form-control" placeholder="Ej. 0991493344"></div>
+                <div class="campo"><label>Correo</label><input type="email" id="nuevo-correo" class="form-control" placeholder="ejemplo@correo.com"></div>
+                <div class="campo"><label>Medio Contactado</label><select id="nuevo-medio" class="form-control"><option value="redes">Redes Sociales</option><option value="whatsapp">WhatsApp</option><option value="llamada">Llamada</option><option value="presencial">Presencial</option></select></div>
+                <div class="campo"><label>Dirección</label><input type="text" id="nuevo-direccion" class="form-control" placeholder="Ciudad y calles"></div>
+                <div class="campo"><label>Estado civil</label><input type="text" id="nuevo-estado-civil" class="form-control" placeholder="Soltero/a, Casado/a, etc."></div>
+                <div class="campo"><label>Grupo sanguíneo</label><input type="text" id="nuevo-grupo-sanguineo" class="form-control" placeholder="A+, O-, etc."></div>
+                <div class="seccion-titulo"><i class="ti ti-notes"></i> Historial Clínico</div>
+                <div class="campo full-width"><label>Historial Médico</label><textarea id="nuevo-historial" class="form-control" rows="2" placeholder="Ej. Diabetes, Hipertensión..."></textarea></div>
+                <div class="campo"><label>Alergias</label><input type="text" id="nuevo-alergias" class="form-control" placeholder="Ej. Penicilina, Polen..."></div>
+                <div class="campo"><label>Medicamentos actuales</label><input type="text" id="nuevo-medicamentos" class="form-control" placeholder="Ej. Paracetamol..."></div>
+                <div class="campo full-width"><label>Historial familiar</label><textarea id="nuevo-familiar" class="form-control" rows="2" placeholder="Enfermedades hereditarias en la familia..."></textarea></div>
+                <div class="campo full-width"><label>Cirugías / Intervenciones</label><textarea id="nuevo-cirugias" class="form-control" rows="2" placeholder="Ej. Apendicectomía en 2020..."></textarea></div>
+              </div>
+              <div class="acciones-form">
+                <button class="btn btn-secondary" onclick="cancelarCrearPaciente()">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardarNuevoPaciente()">Guardar paciente</button>
+              </div>
+            </div>
+
+            <div class="paciente-detalle" id="detalle-paciente">
+              <div style="text-align:center; color: var(--text-light); padding: 40px 0;">
+                <i class="ti ti-user" style="font-size: 48px; display:block; margin-bottom:12px;"></i>
+                Seleccione un paciente de la lista de sugerencias.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL CITA -->
 <div class="modal-overlay" id="modal-cita" onclick="closeModalOnBackdrop(event)">
   <div class="modal-card">
     <div class="modal-header">
-      <div class="modal-title">
-        <i class="ti ti-calendar-plus"></i>
-        <span>Agendar Nueva Cita y Registro de Paciente</span>
-      </div>
+      <div class="modal-title"><i class="ti ti-calendar-plus"></i><span>Agendar Cita</span></div>
       <button class="modal-close" onclick="closeModal('modal-cita')"><i class="ti ti-x"></i></button>
     </div>
-    
     <form id="form-nueva-cita" onsubmit="procesarCita(event)">
       <div class="modal-body">
-        <div class="form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-          
-          <div class="form-section-title" style="grid-column: span 2; width: 100%; margin-bottom: 5px;">
-            <i class="ti ti-user"></i> 1. Datos de Identificación y Contacto
-          </div>
-
+        <div class="form-grid">
+          <div class="form-section-title"><i class="ti ti-user"></i> Datos del Paciente</div>
           <div class="form-group">
-            <label for="identificacion">Cédula o RUC<span>*</span></label>
+            <label>Cédula o RUC <span>*</span></label>
             <div class="input-with-lookup">
-              <input type="text" id="identificacion" class="form-control" placeholder="Ej. 1312345678001" required>
-              <button type="button" class="btn-lookup" title="Verificar existencia" onclick="buscarPaciente()">
-                <i class="ti ti-search"></i>
-              </button>
+             <input type="text" id="identificacion" class="form-control" placeholder="Ej. 1312345678001 (opcional)">
+              <button type="button" class="btn-lookup" onclick="buscarPacienteModal()"><i class="ti ti-search"></i></button>
             </div>
           </div>
-
-          <div class="form-group">
-            <label for="tipo-contribuyente">Tipo de Contribuyente</label>
-            <select id="tipo-contribuyente" class="form-control" disabled>
-              <option value="natural">Persona Natural</option>
-              <option value="juridica">Persona Jurídica</option>
-              <option value="rimpe-popular">Negocio Popular - RIMPE</option>
-              <option value="rimpe-emprendedor">Emprendedor - RIMPE</option>
-            </select>
+          <div class="form-group"><label>Tipo</label><select id="tipo-contribuyente" class="form-control" disabled><option value="natural">Natural</option><option value="juridica">Jurídica</option><option value="rimpe-popular">RIMPE Popular</option><option value="rimpe-emprendedor">RIMPE Emprendedor</option></select></div>
+          <div class="form-group"><label>Apellidos <span>*</span></label><input type="text" id="apellidos" class="form-control" required disabled></div>
+          <div class="form-group"><label>Nombres <span>*</span></label><input type="text" id="nombres" class="form-control" required disabled></div>
+          <div class="form-group"><label>Teléfono 1 <span>*</span></label><input type="tel" id="telefono1" class="form-control" required disabled></div>
+          <div class="form-group"><label>Correo</label><input type="email" id="correo" class="form-control" disabled></div>
+          <div class="form-group"><label>Medio Contactado</label><select id="medio-contacto" class="form-control" disabled><option value="redes">Redes Sociales</option><option value="whatsapp">WhatsApp</option><option value="llamada">Llamada</option><option value="presencial">Presencial</option></select></div>
+          <div class="form-group"><label>Dirección</label><input type="text" id="direccion" class="form-control" disabled></div>
+          <div class="form-section-title"><i class="ti ti-calendar"></i> Detalles de la Cita</div>
+          <div class="form-group"><label>Fecha <span>*</span></label><input type="date" id="fecha-cita" class="form-control" required disabled></div>
+          <div class="form-group"><label>Hora <span>*</span></label><input type="time" id="hora-cita" class="form-control" required disabled></div>
+          <div class="form-group full-width"><label>Motivo <span>*</span></label><textarea id="motivo" class="form-control" rows="2" required disabled></textarea></div>
+          <div class="form-section-title" style="color:var(--warning);"><i class="ti ti-cash"></i> Reserva</div>
+          <div class="form-group"><label>¿Reserva? <span>*</span></label><select id="tiene-reserva" class="form-control" onchange="toggleCamposReserva()" required disabled><option value="si">Sí</option><option value="no">No</option></select></div>
+          <div class="form-group"><label>Valor ($) <span>*</span></label><input type="number" id="valor-reserva" class="form-control" placeholder="0.00" min="0" step="0.01" required disabled></div>
+          <div class="form-group"><label>Forma de Pago</label><select id="forma-reserva" class="form-control" disabled><option value="transferencia">Transferencia</option><option value="deposito">Depósito</option><option value="efectivo">Efectivo</option></select></div>
+          <div class="form-group"><label>Comprobante</label><input type="text" id="n-comprobante" class="form-control" disabled></div>
+        </div>
+        <div id="lista-citas-container">
+          <h4><i class="ti ti-list"></i> Últimas citas del paciente</h4>
+          <div id="lista-citas-tabla"></div>
+          <div class="acciones-citas">
+            <button type="button" class="btn btn-warning" onclick="editarCitaSeleccionada()">Editar</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarCitasSeleccionadas()">Eliminar</button>
           </div>
-
-          <div class="form-group">
-            <label for="apellidos">Apellidos<span>*</span></label>
-            <input type="text" id="apellidos" class="form-control" placeholder="Ej. Mendoza" required disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="nombres">Nombres<span>*</span></label>
-            <input type="text" id="nombres" class="form-control" placeholder="Ej. Victor Manuel" required disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="telefono1">Número Teléfono 1<span>*</span></label>
-            <input type="tel" id="telefono1" class="form-control" placeholder="Ej. 0999999999" required disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="correo">Correo Electrónico</label>
-            <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="medio-contacto">Medio Contactado</label>
-            <select id="medio-contacto" class="form-control" disabled>
-              <option value="redes">Redes Sociales (FB / IG / TikTok)</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="llamada">Llamada Telefónica</option>
-              <option value="presencial">Presencial / Ventanilla</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" class="form-control" placeholder="Ciudad y calles" disabled>
-          </div>
-
-          <div class="form-section-title" style="grid-column: span 2; width: 100%; margin-top: 10px; margin-bottom: 5px;">
-            <i class="ti ti-calendar"></i> 2. Detalles de la Cita
-          </div>
-
-          <div class="form-group">
-            <label for="fecha-cita">Fecha de la Cita<span>*</span></label>
-            <input type="date" id="fecha-cita" class="form-control" required disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="hora-cita">Hora de la Cita<span>*</span></label>
-            <input type="time" id="hora-cita" class="form-control" required disabled>
-          </div>
-
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="motivo">Motivo de la visita / Sintomatología inicial<span>*</span></label>
-            <textarea id="motivo" class="form-control" rows="2" placeholder="¿Por qué nos contacta el paciente? Detalle del tratamiento solicitado..." style="resize: vertical; min-height: 55px;" required disabled></textarea>
-          </div>
-
-          <div class="form-section-title" style="grid-column: span 2; width: 100%; margin-top: 10px; margin-bottom: 5px; color: var(--warning); border-bottom-color: var(--warning);">
-            <i class="ti ti-cash"></i> 3. Gestión y Validación de Reserva Bancaria
-          </div>
-
-          <div class="form-group">
-            <label for="tiene-reserva">¿Registra Abono o Reserva?<span>*</span></label>
-            <select id="tiene-reserva" class="form-control" onchange="toggleCamposReserva()" required disabled>
-              <option value="si" selected>Sí, requiere anticipo bancario</option>
-              <option value="no">No, agenda directo sin depósito</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="valor-reserva">Valor de la Reserva ($)<span>*</span></label>
-            <input type="number" id="valor-reserva" class="form-control" placeholder="0.00" min="0" step="0.01" required disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="forma-reserva">Forma de Pago (Reserva)</label>
-            <select id="forma-reserva" class="form-control" disabled>
-              <option value="transferencia">Transferencia Bancaria</option>
-              <option value="deposito">Depósito Directo</option>
-              <option value="efectivo">Efectivo (Ventanilla)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="n-comprobante">Nº de Comprobante / Referencia</label>
-            <input type="text" id="n-comprobante" class="form-control" placeholder="Ej. TRANS-998234" disabled>
-          </div>
-
         </div>
       </div>
-      
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="closeModal('modal-cita')">Salir</button>
         <button type="button" id="btn-modificar" class="btn btn-warning" onclick="ejecutarModificacion()" disabled>Modificar</button>
@@ -648,220 +1081,871 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-b
 </div>
 
 <script>
-// ===================================================
-// BASE DE DATOS EN MEMORIA (SIMULACIÓN TEMPORAL)
-// ===================================================
-let baseDatosPacientesMemoria = [];
+// ============================================================
+//  LOGIN / AUTH
+// ============================================================
+const ROLES = {
+  admin: { name: 'Administrador', label: '👑 Administrador' },
+  medico: { name: 'Médico', label: '🩺 Médico' },
+  recepcion: { name: 'Recepción', label: '📋 Recepción' }
+};
 
-// ===================================================
-// INICIALIZACIÓN DE INTERFAZ DEL DASHBOARD
-// ===================================================
-document.addEventListener('DOMContentLoaded', () => {
-  const opcionesFecha = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
+// Menú por rol
+const MENU_ITEMS = {
+  admin: [
+    { section: 'Principal', items: [
+      { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Panel de Control', vista: 'dashboard' },
+      { id: 'pacientes', icon: 'ti-users', label: 'Pacientes', vista: 'pacientes' },
+      { id: 'agenda', icon: 'ti-calendar-time', label: 'Agenda', vista: 'dashboard' },
+      { id: 'historia', icon: 'ti-notes', label: 'Historia Clínica', vista: 'dashboard' }
+    ]},
+    { section: 'Módulos Administrativos', items: [
+      { id: 'catalogos', icon: 'ti-database', label: 'Catálogos', submenu: [
+        { icon: 'ti-pill', label: 'Medicamentos' },
+        { icon: 'ti-activity', label: 'Servicios' },
+        { icon: 'ti-truck', label: 'Proveedores' }
+      ]},
+      { id: 'contabilidad', icon: 'ti-calculator', label: 'Contabilidad', vista: 'dashboard' },
+      { id: 'facturacion', icon: 'ti-file-invoice', label: 'Facturación', vista: 'dashboard' },
+      { id: 'reportes', icon: 'ti-chart-pie', label: 'Análisis y Reportes', vista: 'dashboard' },
+      { id: 'configuracion', icon: 'ti-settings', label: 'Configuración', vista: 'dashboard' }
+    ]}
+  ],
+  medico: [
+    { section: 'Principal', items: [
+      { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Panel de Control', vista: 'dashboard' },
+      { id: 'pacientes', icon: 'ti-users', label: 'Pacientes', vista: 'pacientes' },
+      { id: 'agenda', icon: 'ti-calendar-time', label: 'Mi Agenda', vista: 'dashboard' },
+      { id: 'historia', icon: 'ti-notes', label: 'Historia Clínica', vista: 'dashboard' }
+    ]},
+    { section: 'Módulos Médicos', items: [
+      { id: 'recetas', icon: 'ti-prescription', label: 'Recetas Médicas', vista: 'dashboard' },
+      { id: 'consultas', icon: 'ti-stethoscope', label: 'Consultas', vista: 'dashboard' }
+    ]}
+  ],
+  recepcion: [
+    { section: 'Principal', items: [
+      { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Panel de Control', vista: 'dashboard' },
+      { id: 'pacientes', icon: 'ti-users', label: 'Pacientes', vista: 'pacientes' },
+      { id: 'agenda', icon: 'ti-calendar-time', label: 'Agenda', vista: 'dashboard' }
+    ]}
+  ]
+};
 
-  const fechaActual = new Intl.DateTimeFormat('es-ES', opcionesFecha).format(new Date());
+let currentUser = null;
+let currentRol = 'admin';
 
-  document.getElementById('fecha-titulo').textContent =
-    `Buenos días — ${fechaActual.charAt(0).toUpperCase() + fechaActual.slice(1)}`;
+function handleLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value.trim();
+  const errorEl = document.getElementById('login-error');
 
-  restablecerFormularioInicial();
-});
-
-function setActive(el) {
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
+  // Credenciales: admin, medico, recepcion con contraseña 1234
+  if ((user === 'admin' || user === 'medico' || user === 'recepcion') && pass === '1234') {
+    currentUser = user;
+    currentRol = user;
+    errorEl.style.display = 'none';
+    iniciarSesion(user);
+  } else {
+    errorEl.style.display = 'block';
+  }
 }
+
+function iniciarSesion(rol) {
+  // Guardar sesión
+  localStorage.setItem('medisys_session', JSON.stringify({ user: rol, rol: rol }));
+  // Mostrar app
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  // Construir menú
+  construirMenu(rol);
+  // Actualizar datos del usuario en el footer
+  const info = ROLES[rol];
+  document.getElementById('user-avatar').textContent = info.name.substring(0,2).toUpperCase();
+  document.getElementById('user-name').textContent = info.name;
+  document.getElementById('user-role').textContent = rol;
+  // Inicializar
+  cargarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  const fecha = new Intl.DateTimeFormat('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric'}).format(new Date());
+  document.getElementById('fecha-titulo').textContent = `Buenos días — ${fecha.charAt(0).toUpperCase()+fecha.slice(1)}`;
+  restablecerFormularioInicial();
+}
+
+function construirMenu(rol) {
+  const nav = document.getElementById('nav-sidebar');
+  const items = MENU_ITEMS[rol] || MENU_ITEMS.admin;
+  let html = '';
+  items.forEach(section => {
+    html += `<div class="nav-section-label">${section.section}</div>`;
+    section.items.forEach(item => {
+      if (item.submenu) {
+        // Submenú
+        html += `<div class="nav-item open" id="nav-${item.id}" onclick="toggleSubmenu('sub-${item.id}', 'nav-${item.id}')">
+          <i class="ti ${item.icon}"></i> ${item.label}
+          <i class="ti ti-chevron-down chevron"></i>
+        </div>
+        <div class="submenu open" id="sub-${item.id}">`;
+        item.submenu.forEach(sub => {
+          html += `<div class="submenu-item"><span class="dot"></span><i class="ti ${sub.icon}"></i> ${sub.label}</div>`;
+        });
+        html += `</div>`;
+      } else {
+        html += `<div class="nav-item" onclick="cambiarVista('${item.vista}', this)" data-vista="${item.vista}">
+          <i class="ti ${item.icon}"></i> ${item.label}
+        </div>`;
+      }
+    });
+  });
+  nav.innerHTML = html;
+  // Activar dashboard por defecto
+  const firstItem = nav.querySelector('.nav-item');
+  if (firstItem) firstItem.classList.add('active');
+}
+
+// ============================================================
+//  SIDEBAR RESPONSIVE
+// ============================================================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
+function cerrarSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.nav-item, .submenu-item').forEach(item => {
+    item.addEventListener('click', function() {
+      if (window.innerWidth <= 768) cerrarSidebar();
+    });
+  });
+});
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 768) cerrarSidebar();
+});
 
 function toggleSubmenu(subId, navId) {
   const sub = document.getElementById(subId);
   const nav = document.getElementById(navId);
-  sub.classList.toggle('open');
-  nav.classList.toggle('open');
-  setActive(nav);
+  if (sub) sub.classList.toggle('open');
+  if (nav) nav.classList.toggle('open');
 }
 
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden'; 
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = ''; 
-}
-
-function closeModalOnBackdrop(event) {
-  if (event.target.classList.contains('modal-overlay')) {
-    closeModal(event.target.id);
+function cambiarVista(vista, el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('vista-dashboard').style.display = (vista==='dashboard')?'block':'none';
+  document.getElementById('vista-pacientes').style.display = (vista==='pacientes')?'block':'none';
+  document.getElementById('topbar-title').textContent = (vista==='dashboard')?'Visión General':'Pacientes';
+  if (vista==='pacientes') {
+    document.getElementById('sugerencias-pacientes').style.display = 'none';
+    document.getElementById('buscar-paciente').value = '';
+    document.getElementById('detalle-paciente').style.display = 'block';
+    document.getElementById('form-crear-paciente').style.display = 'none';
+    document.getElementById('detalle-paciente').innerHTML = `
+      <div style="text-align:center; color: var(--text-light); padding: 40px 0;">
+        <i class="ti ti-user" style="font-size: 48px; display:block; margin-bottom:12px;"></i>
+        Seleccione un paciente de la lista de sugerencias.
+      </div>
+    `;
   }
 }
 
-// ===================================================
-// 1. FUNCIÓN DE RESTABLECIMIENTO E INICIALIZACIÓN ABSOLUTA
-// ===================================================
-function restablecerFormularioInicial() {
-  document.getElementById('form-nueva-cita').reset();
-  document.getElementById('identificacion').disabled = false;
-  
-  setCamposSeccion1(true);
-  setCamposSeccion2y3(true);
-  
-  document.getElementById('btn-guardar').disabled = true;
-  document.getElementById('btn-modificar').disabled = true;
-  
-  console.log("Formulario limpiado y restablecido al estado inicial.");
+function logout() {
+  localStorage.removeItem('medisys_session');
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = 'admin';
+  document.getElementById('login-pass').value = '1234';
+  document.getElementById('login-error').style.display = 'none';
 }
 
-// ===================================================
-// 2. LOGICA DE BÚSQUEDA DE PACIENTE (CÉDULA o RUC)
-// ===================================================
-function buscarPaciente() {
-  const identificacion = document.getElementById('identificacion').value.trim();
-  
-  if (!identificacion) {
-    alert("Por favor, ingrese un número de Cédula o RUC para realizar la búsqueda.");
+// Verificar sesión al cargar
+document.addEventListener('DOMContentLoaded', function() {
+  const session = localStorage.getItem('medisys_session');
+  if (session) {
+    try {
+      const data = JSON.parse(session);
+      if (data.rol && (data.rol === 'admin' || data.rol === 'medico' || data.rol === 'recepcion')) {
+        currentUser = data.user;
+        currentRol = data.rol;
+        iniciarSesion(data.rol);
+        return;
+      }
+    } catch(e) {}
+  }
+  // Si no hay sesión, mostrar login
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+});
+
+// ============================================================
+//  GLOBALES Y PERSISTENCIA (PACIENTES)
+// ============================================================
+const STORAGE_KEY = 'medisys_pacientes';
+let baseDatosPacientesMemoria = [];
+let modoEdicion = false, indiceEdicion = -1, forzarReserva = false, ultimaIdentificacion = '';
+
+function cargarPacientes() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  if (data) { try { baseDatosPacientesMemoria = JSON.parse(data); } catch(e) { baseDatosPacientesMemoria = []; } }
+}
+function guardarPacientes() { localStorage.setItem(STORAGE_KEY, JSON.stringify(baseDatosPacientesMemoria)); }
+
+// ============================================================
+//  VALIDACIONES
+// ============================================================
+function validarCedula(ced) {
+  if (!/^\d{10}$/.test(ced)) return false;
+  const d = ced.split('').map(Number);
+  const prov = d[0]*10 + d[1];
+  if (prov<1 || prov>24) return false;
+  const v = d.pop();
+  let s=0;
+  for(let i=0; i<d.length; i++) {
+    let m = (i%2===0)?2:1;
+    let val = d[i]*m;
+    if(val>9) val-=9;
+    s+=val;
+  }
+  const calc = (s%10===0)?0:10-(s%10);
+  return calc===v;
+}
+function validarRUC(ruc) {
+  if (!/^\d{13}$/.test(ruc)) return false;
+  const prov = parseInt(ruc.substring(0,2),10);
+  return prov>=1 && prov<=24;
+}
+
+// ============================================================
+//  BÚSQUEDA APROXIMADA (FUZZY)
+// ============================================================
+function normalizar(t) { return t.toLowerCase().replace(/[áäâà]/g,'a').replace(/[éëêè]/g,'e').replace(/[íïîì]/g,'i').replace(/[óöôò]/g,'o').replace(/[úüûù]/g,'u').replace(/ñ/g,'n').replace(/[^a-z0-9 ]/g,''); }
+function coincideAproximado(busqueda, texto) {
+  if (!busqueda.trim()) return false;
+  const nb = normalizar(busqueda), nt = normalizar(texto);
+  if (nt.includes(nb)) return true;
+  const pb = nb.split(' '), pt = nt.split(' ');
+  let c=0;
+  for (let p of pb) { if (p.length<2) continue; for (let q of pt) { if (q.includes(p)||p.includes(q)) { c++; break; } } }
+  return c >= pb.filter(p=>p.length>=2).length;
+}
+
+function obtenerPacientesRecientes() {
+  const mapa = new Map();
+  baseDatosPacientesMemoria.forEach(c => { if (!mapa.has(c.identificacion)) mapa.set(c.identificacion, []); mapa.get(c.identificacion).push(c); });
+  const pacientes = [];
+  mapa.forEach((citas, id) => { citas.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1); pacientes.push({id, ult:citas[0], ultimaFecha:citas[0].fecha}); });
+  pacientes.sort((a,b)=>b.ultimaFecha.localeCompare(a.ultimaFecha));
+  return pacientes.slice(0,5);
+}
+
+function buscarPacientesAutocomplete(texto, esFocus=false) {
+  const contenedor = document.getElementById('sugerencias-pacientes');
+  if (esFocus && !texto.trim()) {
+    const recientes = obtenerPacientesRecientes();
+    let html = `<div style="padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border-color);background:var(--primary-light);font-weight:500;" onclick="crearNuevoPaciente()"><i class="ti ti-user-plus"></i> ➕ Crear nuevo paciente</div>`;
+    if (recientes.length) {
+      html += `<div style="padding:8px 16px;color:var(--text-light);font-size:12px;border-bottom:1px solid var(--border-color);">Últimos pacientes</div>`;
+      recientes.forEach(p => {
+        html += `<div style="padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border-color);transition:background 0.15s;" onmouseover="this.style.background='var(--primary-light)'" onmouseout="this.style.background='white'" onclick="seleccionarPacienteDesdeSugerencia('${p.id}')"><div style="font-weight:500;">${p.ult.nombres} ${p.ult.apellidos}</div><div style="font-size:12px;color:var(--text-light);">${p.id}</div></div>`;
+      });
+    } else {
+      html += `<div style="padding:12px;color:var(--text-light);">No hay pacientes registrados aún</div>`;
+    }
+    contenedor.innerHTML = html;
+    contenedor.style.display = 'block';
     return;
   }
+  if (!texto.trim()) { contenedor.style.display = 'none'; return; }
+  const mapa = new Map();
+  baseDatosPacientesMemoria.forEach(c => { if (!mapa.has(c.identificacion)) mapa.set(c.identificacion, []); mapa.get(c.identificacion).push(c); });
+  const pacientes = [];
+  mapa.forEach((citas, id) => {
+    citas.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1);
+    const ult = citas[0];
+    const nombreCompleto = `${ult.nombres} ${ult.apellidos}`;
+    if (coincideAproximado(texto, id) || coincideAproximado(texto, nombreCompleto)) pacientes.push({id, ult});
+  });
+  if (!pacientes.length) {
+    contenedor.innerHTML = `<div style="padding:10px 16px;cursor:pointer;background:var(--primary-light);font-weight:500;" onclick="crearNuevoPaciente()"><i class="ti ti-user-plus"></i> ➕ Crear nuevo paciente</div><div style="padding:12px;color:var(--text-light);">No se encontraron coincidencias</div>`;
+    contenedor.style.display = 'block';
+    return;
+  }
+  let html = `<div style="padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border-color);background:var(--primary-light);font-weight:500;" onclick="crearNuevoPaciente()"><i class="ti ti-user-plus"></i> ➕ Crear nuevo paciente</div>`;
+  pacientes.slice(0,8).forEach(p => {
+    html += `<div style="padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border-color);transition:background 0.15s;" onmouseover="this.style.background='var(--primary-light)'" onmouseout="this.style.background='white'" onclick="seleccionarPacienteDesdeSugerencia('${p.id}')"><div style="font-weight:500;">${p.ult.nombres} ${p.ult.apellidos}</div><div style="font-size:12px;color:var(--text-light);">${p.id}</div></div>`;
+  });
+  contenedor.innerHTML = html;
+  contenedor.style.display = 'block';
+}
 
-  const simularExiste = confirm(`¿Deseas simular que el Paciente con Cédula/RUC [ ${identificacion} ] YA EXISTE?\n\n[Aceptar] = Sí existe\n[Cancelar] = No existe (Cliente Nuevo)`);
+function crearNuevoPaciente() {
+  document.getElementById('sugerencias-pacientes').style.display = 'none';
+  document.getElementById('buscar-paciente').value = '';
+  document.getElementById('detalle-paciente').style.display = 'none';
+  document.getElementById('form-crear-paciente').style.display = 'block';
+  ['nuevo-identificacion','nuevo-apellidos','nuevo-nombres','nuevo-telefono','nuevo-correo','nuevo-direccion','nuevo-estado-civil','nuevo-grupo-sanguineo','nuevo-historial','nuevo-alergias','nuevo-medicamentos','nuevo-familiar','nuevo-cirugias'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('nuevo-tipo').value = 'natural';
+  document.getElementById('nuevo-medio').value = 'redes';
+  setTimeout(() => document.getElementById('nuevo-identificacion').focus(), 300);
+}
+function cancelarCrearPaciente() {
+  document.getElementById('form-crear-paciente').style.display = 'none';
+  document.getElementById('detalle-paciente').style.display = 'block';
+  document.getElementById('detalle-paciente').innerHTML = `<div style="text-align:center;color:var(--text-light);padding:40px 0;"><i class="ti ti-user" style="font-size:48px;display:block;margin-bottom:12px;"></i>Seleccione un paciente de la lista de sugerencias.</div>`;
+}
+function guardarNuevoPaciente() {
+  const id = document.getElementById('nuevo-identificacion').value.trim();
+  const apellidos = document.getElementById('nuevo-apellidos').value.trim();
+  const nombres = document.getElementById('nuevo-nombres').value.trim();
+  const telefono = document.getElementById('nuevo-telefono').value.trim();
+  // La cédula es opcional, no la validamos
+  if (!apellidos) { alert('Ingrese los apellidos'); document.getElementById('nuevo-apellidos').focus(); return; }
+  if (!nombres) { alert('Ingrese los nombres'); document.getElementById('nuevo-nombres').focus(); return; }
+  if (!telefono) { alert('Ingrese el teléfono'); document.getElementById('nuevo-telefono').focus(); return; }
+  if (!/^\d{10}$/.test(telefono)) { alert('El teléfono debe tener 10 dígitos'); return; }
+  let valido = false;
+  if (id.length===10 && validarCedula(id)) valido = true;
+  else if (id.length===13 && validarRUC(id)) valido = true;
+  if (!valido) { alert('Formato de cédula (10 dígitos) o RUC (13 dígitos) inválido'); return; }
+  if (baseDatosPacientesMemoria.some(c => c.identificacion === id)) { alert('⚠️ Ya existe un paciente con esta cédula/RUC.'); return; }
+  const nuevo = {
+    identificacion: id,
+    tipoContribuyente: document.getElementById('nuevo-tipo').value,
+    apellidos, nombres, telefono,
+    correo: document.getElementById('nuevo-correo').value.trim(),
+    medioContacto: document.getElementById('nuevo-medio').value,
+    direccion: document.getElementById('nuevo-direccion').value.trim(),
+    estadoCivil: document.getElementById('nuevo-estado-civil').value.trim(),
+    grupoSanguineo: document.getElementById('nuevo-grupo-sanguineo').value.trim(),
+    historialMedico: document.getElementById('nuevo-historial').value.trim(),
+    alergias: document.getElementById('nuevo-alergias').value.trim(),
+    medicamentos: document.getElementById('nuevo-medicamentos').value.trim(),
+    historialFamiliar: document.getElementById('nuevo-familiar').value.trim(),
+    cirugias: document.getElementById('nuevo-cirugias').value.trim(),
+    fecha: '', hora: '', motivo: '', tieneReserva: 'no', valorReserva: '0.00', formaReserva: 'N/A', comprobante: 'N/A', cumplida: false
+  };
+  baseDatosPacientesMemoria.push(nuevo);
+  guardarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  alert('✅ Paciente guardado correctamente.');
+  cancelarCrearPaciente();
+  seleccionarPaciente(id);
+}
+function seleccionarPacienteDesdeSugerencia(id) {
+  document.getElementById('sugerencias-pacientes').style.display = 'none';
+  document.getElementById('buscar-paciente').value = '';
+  seleccionarPaciente(id);
+}
 
-  if (simularExiste) {
-    document.getElementById('tipo-contribuyente').value = "natural";
-    document.getElementById('apellidos').value = "Mendoza de la Cruz";
-    document.getElementById('nombres').value = "Victor Manuel";
-    document.getElementById('telefono1').value = "0999999999";
-    document.getElementById('correo').value = "victor.mendoza@ejemplo.com";
-    document.getElementById('medio-contacto').value = "whatsapp";
-    document.getElementById('direccion').value = "Calceta, Manabí";
+// ============================================================
+//  SELECCIONAR PACIENTE Y MOSTRAR DETALLE (con botones)
+// ============================================================
+function seleccionarPaciente(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  citas.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1);
+  if(!citas.length) return;
+  const ult = citas[0];
+  const detalle = document.getElementById('detalle-paciente');
+  const hoy = new Date().toISOString().split('T')[0];
+  const faltas = citas.filter(c => c.fecha < hoy && c.tieneReserva==='no' && !c.cumplida).length;
+  
+  detalle.style.display = 'block';
+  detalle.innerHTML = `
+    <!-- BARRA DE BOTONES -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+      <button class="btn btn-primary" onclick="generarConsultaMedica('${id}')">
+        <i class="ti ti-stethoscope"></i> Consulta Médica
+      </button>
+      <button class="btn btn-warning" onclick="generarReceta('${id}')">
+        <i class="ti ti-prescription"></i> Receta
+      </button>
+      <button class="btn btn-secondary" onclick="modificarDatosPaciente('${id}')">
+        <i class="ti ti-edit"></i> Modificar Datos
+      </button>
+      <button class="btn btn-info" onclick="abrirEdicionHistorial('${id}')">
+        <i class="ti ti-notes"></i> Editar Historial
+      </button>
+      <button class="btn btn-success" onclick="generarFactura('${id}')">
+        <i class="ti ti-file-invoice"></i> Factura
+      </button>
+      <button class="btn btn-danger" onclick="salirDetalle()">
+        <i class="ti ti-logout"></i> Salir
+      </button>
+    </div>
 
-    setCamposSeccion1(true);
-    setCamposSeccion2y3(false);
+    <div class="grid-paciente">
+      <div class="seccion-titulo"><i class="ti ti-user"></i> Datos de Identificación y Contacto</div>
+      <div class="campo"><label>Cédula / RUC</label><div class="valor">${ult.identificacion}</div></div>
+      <div class="campo"><label>Tipo</label><div class="valor">${ult.tipoContribuyente || 'Natural'}</div></div>
+      <div class="campo"><label>Apellidos</label><div class="valor">${ult.apellidos}</div></div>
+      <div class="campo"><label>Nombres</label><div class="valor">${ult.nombres}</div></div>
+      <div class="campo"><label>Teléfono</label><div class="valor">${ult.telefono}</div></div>
+      <div class="campo"><label>Correo</label><div class="valor">${ult.correo || '-'}</div></div>
+      <div class="campo"><label>Medio contacto</label><div class="valor">${ult.medioContacto || '-'}</div></div>
+      <div class="campo"><label>Dirección</label><div class="valor">${ult.direccion || '-'}</div></div>
+      <div class="campo"><label>Estado civil</label><div class="valor">${ult.estadoCivil || '-'}</div></div>
+      <div class="campo"><label>Grupo sanguíneo</label><div class="valor">${ult.grupoSanguineo || '-'}</div></div>
+      <div class="campo full-width"><label>Faltas sin reserva</label><div class="valor" style="${faltas>=5?'color:var(--danger);font-weight:bold;':''}">${faltas} ${faltas>=5?'⚠️ (Forzar reserva)':''}</div></div>
+
+      <div class="seccion-titulo"><i class="ti ti-notes"></i> Historial Clínico</div>
+      <div class="campo full-width"><label>Historial Médico</label><div class="valor">${ult.historialMedico || '-'}</div></div>
+      <div class="campo"><label>Alergias</label><div class="valor">${ult.alergias || '-'}</div></div>
+      <div class="campo"><label>Medicamentos actuales</label><div class="valor">${ult.medicamentos || '-'}</div></div>
+      <div class="campo full-width"><label>Historial familiar</label><div class="valor">${ult.historialFamiliar || '-'}</div></div>
+      <div class="campo full-width"><label>Cirugías / Intervenciones</label><div class="valor">${ult.cirugias || '-'}</div></div>
+    </div>
+
+    <div class="citas-lista">
+      <h4>📋 Historial de citas</h4>
+      ${citas.map(c => {
+        const estadoClase = c.cumplida ? 'cumplida' : (c.fecha < hoy ? 'no-cumplida' : 'pendiente');
+        const estadoTexto = c.cumplida ? '✅ Cumplida' : (c.fecha < hoy ? '❌ No cumplida' : '⏳ Pendiente');
+        return `<div class="cita-item">
+          <span class="fecha-hora">${c.fecha} ${c.hora}</span>
+          <span class="estado ${estadoClase}">${estadoTexto}</span>
+          <span style="font-size:12px;color:var(--text-light);">${c.motivo}</span>
+          <span style="font-size:12px;color:var(--text-light);">Reserva: ${c.tieneReserva==='si'?'Sí':'No'}</span>
+          ${!c.cumplida && c.fecha < hoy ? `<button onclick="marcarCumplida('${c.identificacion}','${c.fecha}','${c.hora}')">Marcar cumplida</button>` : ''}
+          ${c.cumplida ? `<button onclick="marcarNoCumplida('${c.identificacion}','${c.fecha}','${c.hora}')">Marcar no cumplida</button>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ============================================================
+//  BOTONES DE ACCIÓN EN DETALLE
+// ============================================================
+function generarConsultaMedica(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  if(!citas.length) return;
+  const ult = citas[0];
+  alert(`🩺 Generar Consulta Médica para:\n${ult.nombres} ${ult.apellidos}\n\n(Pendiente: módulo en desarrollo)`);
+}
+function generarReceta(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  if(!citas.length) return;
+  const ult = citas[0];
+  alert(`📋 Generar Receta para:\n${ult.nombres} ${ult.apellidos}\n\n(Pendiente: módulo en desarrollo)`);
+}
+function modificarDatosPaciente(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  if(!citas.length) return;
+  const ult = citas[0];
+  document.getElementById('detalle-paciente').style.display = 'none';
+  document.getElementById('form-crear-paciente').style.display = 'block';
+  document.getElementById('nuevo-identificacion').value = ult.identificacion;
+  document.getElementById('nuevo-identificacion').disabled = true;
+  document.getElementById('nuevo-tipo').value = ult.tipoContribuyente || 'natural';
+  document.getElementById('nuevo-apellidos').value = ult.apellidos;
+  document.getElementById('nuevo-nombres').value = ult.nombres;
+  document.getElementById('nuevo-telefono').value = ult.telefono;
+  document.getElementById('nuevo-correo').value = ult.correo || '';
+  document.getElementById('nuevo-medio').value = ult.medioContacto || 'redes';
+  document.getElementById('nuevo-direccion').value = ult.direccion || '';
+  document.getElementById('nuevo-estado-civil').value = ult.estadoCivil || '';
+  document.getElementById('nuevo-grupo-sanguineo').value = ult.grupoSanguineo || '';
+  document.getElementById('nuevo-historial').value = ult.historialMedico || '';
+  document.getElementById('nuevo-alergias').value = ult.alergias || '';
+  document.getElementById('nuevo-medicamentos').value = ult.medicamentos || '';
+  document.getElementById('nuevo-familiar').value = ult.historialFamiliar || '';
+  document.getElementById('nuevo-cirugias').value = ult.cirugias || '';
+  const btnGuardar = document.querySelector('#form-crear-paciente .btn-primary');
+  btnGuardar.textContent = 'Actualizar datos';
+  btnGuardar.onclick = function() { actualizarDatosPaciente(id); };
+}
+function actualizarDatosPaciente(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  if(!citas.length) return;
+  const nuevosDatos = {
+    apellidos: document.getElementById('nuevo-apellidos').value.trim(),
+    nombres: document.getElementById('nuevo-nombres').value.trim(),
+    telefono: document.getElementById('nuevo-telefono').value.trim(),
+    correo: document.getElementById('nuevo-correo').value.trim(),
+    medioContacto: document.getElementById('nuevo-medio').value,
+    direccion: document.getElementById('nuevo-direccion').value.trim(),
+    estadoCivil: document.getElementById('nuevo-estado-civil').value.trim(),
+    grupoSanguineo: document.getElementById('nuevo-grupo-sanguineo').value.trim(),
+    historialMedico: document.getElementById('nuevo-historial').value.trim(),
+    alergias: document.getElementById('nuevo-alergias').value.trim(),
+    medicamentos: document.getElementById('nuevo-medicamentos').value.trim(),
+    historialFamiliar: document.getElementById('nuevo-familiar').value.trim(),
+    cirugias: document.getElementById('nuevo-cirugias').value.trim()
+  };
+  if (nuevosDatos.telefono && !/^\d{10}$/.test(nuevosDatos.telefono)) {
+    alert('El teléfono debe tener 10 dígitos.');
+    return;
+  }
+  citas.forEach(c => Object.assign(c, nuevosDatos));
+  guardarPacientes();
+  alert('✅ Datos actualizados.');
+  document.getElementById('nuevo-identificacion').disabled = false;
+  const btnGuardar = document.querySelector('#form-crear-paciente .btn-primary');
+  btnGuardar.textContent = 'Guardar paciente';
+  btnGuardar.onclick = guardarNuevoPaciente;
+  cancelarCrearPaciente();
+  seleccionarPaciente(id);
+}
+function generarFactura(id) {
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  if(!citas.length) return;
+  const ult = citas[0];
+  alert(`🧾 Generar Factura para:\n${ult.nombres} ${ult.apellidos}\n\n(Pendiente: módulo de facturación en desarrollo)`);
+}
+function salirDetalle() {
+  const detalle = document.getElementById('detalle-paciente');
+  detalle.style.display = 'block';
+  detalle.innerHTML = `
+    <div style="text-align:center; color: var(--text-light); padding: 40px 0;">
+      <i class="ti ti-user" style="font-size: 48px; display:block; margin-bottom:12px;"></i>
+      Seleccione un paciente de la lista de sugerencias.
+    </div>
+  `;
+  document.getElementById('form-crear-paciente').style.display = 'none';
+  document.getElementById('buscar-paciente').value = '';
+  document.getElementById('sugerencias-pacientes').style.display = 'none';
+}
+
+// ============================================================
+//  FUNCIONES PARA MARCAR CITAS CUMPLIDAS / NO CUMPLIDAS
+// ============================================================
+function marcarCumplida(id, fecha, hora) {
+  const idx = baseDatosPacientesMemoria.findIndex(c => c.identificacion === id && c.fecha === fecha && c.hora === hora);
+  if(idx===-1) return;
+  baseDatosPacientesMemoria[idx].cumplida = true;
+  guardarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  seleccionarPaciente(id);
+}
+function marcarNoCumplida(id, fecha, hora) {
+  const idx = baseDatosPacientesMemoria.findIndex(c => c.identificacion === id && c.fecha === fecha && c.hora === hora);
+  if(idx===-1) return;
+  baseDatosPacientesMemoria[idx].cumplida = false;
+  guardarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  seleccionarPaciente(id);
+}
+
+// ============================================================
+//  ACTUALIZAR AGENDA Y MÉTRICAS
+// ============================================================
+function actualizarAgenda() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const citas = baseDatosPacientesMemoria.filter(c => c.fecha === hoy);
+  const cont = document.getElementById('agenda-container');
+  if(!cont) return;
+  if(!citas.length) { cont.innerHTML = '<div class="appointment-item" style="justify-content:center;color:var(--text-light);">No hay citas hoy</div>'; return; }
+  citas.sort((a,b)=>a.hora.localeCompare(b.hora));
+  cont.innerHTML = citas.map(c => {
+    const dot = c.tieneReserva==='si' ? 'var(--success)' : 'var(--info)';
+    const badge = c.tieneReserva==='si' ? 'badge-green' : 'badge-blue';
+    const txt = c.tieneReserva==='si' ? 'Confirmada' : 'Pendiente';
+    return `<div class="appointment-item"><span class="appt-time">${c.hora}</span><span class="appt-dot" style="background:${dot}"></span><div class="appt-info"><div class="appt-name">${c.nombres} ${c.apellidos}</div><div class="appt-type">${c.motivo}</div></div><span class="appt-badge ${badge}">${txt}</span></div>`;
+  }).join('');
+}
+function actualizarMetricas() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const citasHoy = baseDatosPacientesMemoria.filter(c => c.fecha === hoy).length;
+  const pacientes = [...new Set(baseDatosPacientesMemoria.map(c => c.identificacion))].length;
+  const facturado = baseDatosPacientesMemoria.reduce((s,c) => s + parseFloat(c.valorReserva||0), 0);
+  document.getElementById('metric-citas-hoy').textContent = citasHoy;
+  document.getElementById('metric-pacientes').textContent = pacientes;
+  document.getElementById('metric-facturado').textContent = `$${facturado.toFixed(2)}`;
+}
+
+// ============================================================
+//  MODAL CITA (funciones)
+// ============================================================
+function openModal(id) {
+  const modal = document.getElementById(id);
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  if (id === 'modal-cita') {
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha-cita').setAttribute('min', hoy);
+    restablecerFormularioInicial();
     
-    document.getElementById('btn-guardar').disabled = false;
-    document.getElementById('btn-modificar').disabled = false;
-
-  } else {
-    const deseaCrear = confirm("Cliente no existe, ¿deseas crearlo?");
-    
-    if (deseaCrear) {
-      setCamposSeccion1(false);
-      setCamposSeccion2y3(false);
-      
-      document.getElementById('btn-guardar').disabled = false;
-      document.getElementById('btn-modificar').disabled = true;
+    // 🔥 RESETEAR SCROLL AL INICIO
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+      modalBody.scrollTop = 0;
     }
   }
 }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOnBackdrop(e) {
+  if(e.target.classList.contains('modal-overlay')) closeModal(e.target.id);
+}
 
-// ===================================================
-// 3. ACCIÓN DEL BOTÓN MODIFICAR (Habilitar Título 1)
-// ===================================================
+function restablecerFormularioInicial() {
+  document.getElementById('form-nueva-cita').reset();
+  ['identificacion','apellidos','nombres','telefono1','correo','direccion','motivo','valor-reserva','n-comprobante'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('tipo-contribuyente').value = 'natural';
+  document.getElementById('medio-contacto').value = 'redes';
+  document.getElementById('tiene-reserva').value = 'si';
+  document.getElementById('forma-reserva').value = 'transferencia';
+  document.getElementById('identificacion').disabled = false;
+  setCamposSeccion1(true);
+  setCamposSeccion2y3(true);
+  document.getElementById('btn-guardar').disabled = true;
+  document.getElementById('btn-guardar').innerHTML = 'Guardar';
+  document.getElementById('btn-modificar').disabled = true;
+  document.querySelectorAll('#form-nueva-cita .form-control').forEach(f => f.classList.remove('error'));
+  toggleCamposReserva();
+  ocultarGridCitas();
+  modoEdicion = false; indiceEdicion = -1; forzarReserva = false;
+}
+function setCamposSeccion1(des) {
+  ['tipo-contribuyente','apellidos','nombres','telefono1','correo','medio-contacto','direccion'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.disabled = des;
+  });
+}
+function setCamposSeccion2y3(des) {
+  ['fecha-cita','hora-cita','motivo','tiene-reserva','valor-reserva','forma-reserva','n-comprobante'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      if(!des && (id==='valor-reserva'||id==='forma-reserva'||id==='n-comprobante')) {
+        const tiene = document.getElementById('tiene-reserva').value;
+        if(tiene==='no') { el.disabled = true; return; }
+      }
+      el.disabled = des;
+    }
+  });
+}
+function toggleCamposReserva() {
+  const val = document.getElementById('tiene-reserva').value;
+  const v = document.getElementById('valor-reserva');
+  const f = document.getElementById('forma-reserva');
+  const c = document.getElementById('n-comprobante');
+  if(val==='no') { v.value = '0.00'; v.disabled = true; v.required = false; f.disabled = true; c.disabled = true; c.value = ''; }
+  else { v.value = ''; v.disabled = false; v.required = true; f.disabled = false; c.disabled = false; }
+}
+
+function buscarPacienteModal() {
+  const id = document.getElementById('identificacion').value.trim();
+  if(!id) { alert('Ingrese cédula o RUC'); return; }
+  let valido = false;
+  if(id.length===10 && validarCedula(id)) valido = true;
+  else if(id.length===13 && validarRUC(id)) valido = true;
+  if(!valido) { alert('Formato inválido'); return; }
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  citas.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1);
+  if(citas.length>0) {
+    const ult = citas[0];
+    document.getElementById('tipo-contribuyente').value = ult.tipoContribuyente || 'natural';
+    document.getElementById('apellidos').value = ult.apellidos;
+    document.getElementById('nombres').value = ult.nombres;
+    document.getElementById('telefono1').value = ult.telefono;
+    document.getElementById('correo').value = ult.correo || '';
+    document.getElementById('medio-contacto').value = ult.medioContacto || 'redes';
+    document.getElementById('direccion').value = ult.direccion || '';
+    const hoy = new Date().toISOString().split('T')[0];
+    const faltas = citas.filter(c => c.fecha < hoy && c.tieneReserva==='no' && !c.cumplida);
+    forzarReserva = (faltas.length >= 5);
+    if(forzarReserva) {
+      alert(`⚠️ Este paciente tiene ${faltas.length} faltas sin reserva. Se fuerza reserva.`);
+      document.getElementById('tiene-reserva').value = 'si';
+      document.getElementById('tiene-reserva').disabled = true;
+      toggleCamposReserva();
+    } else {
+      document.getElementById('tiene-reserva').disabled = false;
+    }
+    mostrarGridCitas(citas.slice(0,5));
+    setCamposSeccion1(true);
+    setCamposSeccion2y3(false);
+    document.getElementById('btn-guardar').disabled = false;
+    document.getElementById('btn-modificar').disabled = false;
+    ultimaIdentificacion = id;
+  } else {
+    document.getElementById('tipo-contribuyente').value = 'natural';
+    document.getElementById('apellidos').value = '';
+    document.getElementById('nombres').value = '';
+    document.getElementById('telefono1').value = '';
+    document.getElementById('correo').value = '';
+    document.getElementById('direccion').value = '';
+    document.getElementById('tiene-reserva').disabled = false;
+    forzarReserva = false;
+    ocultarGridCitas();
+    setCamposSeccion1(false);
+    setCamposSeccion2y3(false);
+    document.getElementById('btn-guardar').disabled = false;
+    document.getElementById('btn-modificar').disabled = true;
+    ultimaIdentificacion = id;
+  }
+}
 function ejecutarModificacion() {
   setCamposSeccion1(false);
   document.getElementById('btn-modificar').disabled = true;
-  alert("Campos de identificación y contacto del paciente habilitados para corrección.");
 }
 
-// ===================================================
-// 4. PROCESAR Y GUARDAR CITA (PROCESO DE GUARDADO CORREGIDO)
-// ===================================================
-function procesarCita(event) {
-  event.preventDefault(); 
-  
-  const estarDeAcuerdo = confirm("¿Está de acuerdo con guardar los datos de la cita y el registro actual?");
-  
-  if (estarDeAcuerdo) {
-    const tieneReserva = document.getElementById('tiene-reserva').value;
-    const datosCita = {
-      identificacion: document.getElementById('identificacion').value,
-      tipoContribuyente: document.getElementById('tipo-contribuyente').value,
-      apellidos: document.getElementById('apellidos').value,
-      nombres: document.getElementById('nombres').value,
-      telefono: document.getElementById('telefono1').value,
-      correo: document.getElementById('correo').value,
-      medioContacto: document.getElementById('medio-contacto').value,
-      direccion: document.getElementById('direccion').value,
-      fecha: document.getElementById('fecha-cita').value,
-      hora: document.getElementById('hora-cita').value,
-      motivo: document.getElementById('motivo').value,
-      tieneReserva: tieneReserva,
-      valorReserva: tieneReserva === 'si' ? document.getElementById('valor-reserva').value : '0.00',
-      formaReserva: tieneReserva === 'si' ? document.getElementById('forma-reserva').value : 'N/A',
-      comprobante: tieneReserva === 'si' ? document.getElementById('n-comprobante').value : 'N/A'
-    };
-
-    baseDatosPacientesMemoria.push(datosCita);
-    console.log("Registro guardado con éxito en memoria interna:", baseDatosPacientesMemoria);
-    
-    if (datosCita.tieneReserva === 'si') {
-      alert(`¡Éxito! Cita agendada para ${datosCita.nombres} ${datosCita.apellidos}.\nFecha: ${datosCita.fecha} a las ${datosCita.hora}.\nReserva validada por $${datosCita.valorReserva}.`);
-    } else {
-      alert(`¡Éxito! Cita agendada para ${datosCita.nombres} ${datosCita.apellidos}.\nFecha: ${datosCita.fecha} a las ${datosCita.hora}.\nRegistrado sin anticipo.`);
-    }
-    
-    restablecerFormularioInicial();
-    closeModal('modal-cita');
-    
-  } else {
-    console.log("Guardado cancelado por el operador.");
-  }
-}
-
-// ===================================================
-// FUNCIONES DE CONTROL DE ESTADOS (ACTIVACIÓN/DESACTIVACIÓN)
-// ===================================================
-function setCamposSeccion1(deshabilitar) {
-  const campos = ['tipo-contribuyente', 'apellidos', 'nombres', 'telefono1', 'correo', 'medio-contacto', 'direccion'];
-  campos.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = deshabilitar;
+function mostrarGridCitas(citas) {
+  const container = document.getElementById('lista-citas-container');
+  const tabla = document.getElementById('lista-citas-tabla');
+  if(!citas || !citas.length) { container.classList.remove('visible'); return; }
+  let html = `<table><thead><tr><th class="cita-check"><input type="checkbox" id="seleccionar-todas" onchange="toggleSeleccionarTodas()"></th><th>Fecha</th><th>Hora</th><th>Motivo</th><th>Reserva</th></tr></thead><tbody>`;
+  citas.forEach((c,i) => {
+    const perm = (c.tieneReserva==='si');
+    const res = c.tieneReserva==='si' ? '💰 Sí' : '❌ No';
+    html += `<tr><td class="cita-check"><input type="checkbox" class="cita-checkbox" data-index="${i}" ${perm?'':'disabled'}></td><td>${c.fecha}</td><td>${c.hora}</td><td>${c.motivo}</td><td>${res}</td></tr>`;
   });
+  html += `</tbody></table>`;
+  tabla.innerHTML = html;
+  container.classList.add('visible');
+  window._citasPaciente = citas;
 }
-
-function setCamposSeccion2y3(deshabilitar) {
-  const campos = ['fecha-cita', 'hora-cita', 'motivo', 'tiene-reserva', 'valor-reserva', 'forma-reserva', 'n-comprobante'];
-  campos.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      if (!deshabilitar && (id === 'valor-reserva' || id === 'forma-reserva' || id === 'n-comprobante')) {
-        const tieneReserva = document.getElementById('tiene-reserva').value;
-        if (tieneReserva === 'no') {
-          el.disabled = true;
-          return;
-        }
-      }
-      el.disabled = deshabilitar;
-    }
+function ocultarGridCitas() {
+  document.getElementById('lista-citas-container').classList.remove('visible');
+  window._citasPaciente = [];
+}
+function toggleSeleccionarTodas() {
+  const chk = document.getElementById('seleccionar-todas').checked;
+  document.querySelectorAll('.cita-checkbox:not([disabled])').forEach(cb => cb.checked = chk);
+}
+function eliminarCitasSeleccionadas() {
+  const cbs = document.querySelectorAll('.cita-checkbox:checked');
+  if(!cbs.length) { alert('Seleccione al menos una cita con reserva.'); return; }
+  if(!confirm(`Eliminar ${cbs.length} cita(s)?`)) return;
+  const idx = Array.from(cbs).map(cb => parseInt(cb.dataset.index)).sort((a,b)=>b-a);
+  idx.forEach(i => {
+    const c = window._citasPaciente[i];
+    const pos = baseDatosPacientesMemoria.indexOf(c);
+    if(pos!==-1) baseDatosPacientesMemoria.splice(pos,1);
   });
+  guardarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  const id = document.getElementById('identificacion').value.trim();
+  const rest = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  rest.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1);
+  mostrarGridCitas(rest.slice(0,5));
+  alert('Citas eliminadas.');
+}
+function editarCitaSeleccionada() {
+  const cbs = document.querySelectorAll('.cita-checkbox:checked');
+  if(cbs.length!==1) { alert('Seleccione una sola cita con reserva.'); return; }
+  const idx = parseInt(cbs[0].dataset.index);
+  const c = window._citasPaciente[idx];
+  document.getElementById('fecha-cita').value = c.fecha;
+  document.getElementById('hora-cita').value = c.hora;
+  document.getElementById('motivo').value = c.motivo;
+  document.getElementById('tiene-reserva').value = c.tieneReserva;
+  document.getElementById('valor-reserva').value = c.valorReserva;
+  document.getElementById('forma-reserva').value = c.formaReserva || 'transferencia';
+  document.getElementById('n-comprobante').value = c.comprobante || '';
+  modoEdicion = true;
+  indiceEdicion = baseDatosPacientesMemoria.indexOf(c);
+  document.getElementById('btn-guardar').innerHTML = 'Actualizar';
+  document.getElementById('btn-modificar').disabled = true;
 }
 
-function toggleCamposReserva() {
-  const tieneReserva = document.getElementById('tiene-reserva').value;
-  const valorReserva = document.getElementById('valor-reserva');
-  const formaReserva = document.getElementById('forma-reserva');
-  const nComprobante = document.getElementById('n-comprobante');
-
-  if (tieneReserva === 'no') {
-    valorReserva.value = "0.00";
-    valorReserva.disabled = true;
-    valorReserva.required = false;
-    formaReserva.disabled = true;
-    nComprobante.disabled = true;
-    nComprobante.value = "";
-  } else {
-    valorReserva.value = "";
-    valorReserva.disabled = false;
-    valorReserva.required = true;
-    formaReserva.disabled = false;
-    nComprobante.disabled = false;
+function procesarCita(e) {
+  e.preventDefault();
+  const req = document.querySelectorAll('#form-nueva-cita [required]');
+  let ok = true;
+  req.forEach(f => { if(!f.value.trim()) { f.classList.add('error'); ok=false; } else f.classList.remove('error'); });
+  if(!ok) { alert('Complete todos los campos con *'); return; }
+  const fecha = document.getElementById('fecha-cita').value;
+  const hoy = new Date().toISOString().split('T')[0];
+  if(fecha < hoy) { alert('Fecha no puede ser anterior a hoy'); return; }
+  const tel = document.getElementById('telefono1').value.trim();
+  if(!/^\d{10}$/.test(tel)) { alert('Teléfono debe tener 10 dígitos'); return; }
+  const correo = document.getElementById('correo').value.trim();
+  if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { alert('Correo inválido'); return; }
+  const tiene = document.getElementById('tiene-reserva').value;
+  if(forzarReserva && tiene==='no') { alert('Debe reservar obligatoriamente'); document.getElementById('tiene-reserva').value='si'; return; }
+  if(tiene==='si') {
+    const val = parseFloat(document.getElementById('valor-reserva').value);
+    if(isNaN(val) || val<=0) { alert('Valor de reserva debe ser >0'); return; }
   }
+  const id = document.getElementById('identificacion').value.trim();
+  const datos = {
+    identificacion: id,
+    tipoContribuyente: document.getElementById('tipo-contribuyente').value,
+    apellidos: document.getElementById('apellidos').value.trim(),
+    nombres: document.getElementById('nombres').value.trim(),
+    telefono: tel,
+    correo: correo,
+    medioContacto: document.getElementById('medio-contacto').value,
+    direccion: document.getElementById('direccion').value.trim(),
+    fecha: fecha,
+    hora: document.getElementById('hora-cita').value,
+    motivo: document.getElementById('motivo').value.trim(),
+    tieneReserva: tiene,
+    valorReserva: tiene==='si' ? document.getElementById('valor-reserva').value : '0.00',
+    formaReserva: tiene==='si' ? document.getElementById('forma-reserva').value : 'N/A',
+    comprobante: tiene==='si' ? document.getElementById('n-comprobante').value.trim() : 'N/A',
+    cumplida: false
+  };
+  if(!confirm(`Guardar cita?\n${datos.nombres} ${datos.apellidos}\n${datos.fecha} ${datos.hora}`)) return;
+  if(modoEdicion && indiceEdicion!==-1) {
+    baseDatosPacientesMemoria[indiceEdicion] = datos;
+    modoEdicion = false; indiceEdicion = -1;
+    document.getElementById('btn-guardar').innerHTML = 'Guardar';
+    alert('Cita actualizada');
+  } else {
+    baseDatosPacientesMemoria.push(datos);
+    alert('Cita guardada');
+  }
+  guardarPacientes();
+  actualizarAgenda();
+  actualizarMetricas();
+  restablecerFormularioInicial();
+  if(id) refrescarPaciente(id);
+}
+function refrescarPaciente(id) {
+  if(!id) return;
+  const citas = baseDatosPacientesMemoria.filter(c => c.identificacion === id);
+  citas.sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)*-1);
+  if(!citas.length) {
+    document.getElementById('apellidos').value = '';
+    document.getElementById('nombres').value = '';
+    document.getElementById('telefono1').value = '';
+    document.getElementById('correo').value = '';
+    document.getElementById('direccion').value = '';
+    ocultarGridCitas();
+    return;
+  }
+  const ult = citas[0];
+  document.getElementById('tipo-contribuyente').value = ult.tipoContribuyente || 'natural';
+  document.getElementById('apellidos').value = ult.apellidos;
+  document.getElementById('nombres').value = ult.nombres;
+  document.getElementById('telefono1').value = ult.telefono;
+  document.getElementById('correo').value = ult.correo || '';
+  document.getElementById('medio-contacto').value = ult.medioContacto || 'redes';
+  document.getElementById('direccion').value = ult.direccion || '';
+  const hoy = new Date().toISOString().split('T')[0];
+  const faltas = citas.filter(c => c.fecha < hoy && c.tieneReserva==='no' && !c.cumplida);
+  forzarReserva = (faltas.length >= 5);
+  if(forzarReserva) {
+    document.getElementById('tiene-reserva').value = 'si';
+    document.getElementById('tiene-reserva').disabled = true;
+    toggleCamposReserva();
+  } else {
+    document.getElementById('tiene-reserva').disabled = false;
+  }
+  mostrarGridCitas(citas.slice(0,5));
+  setCamposSeccion2y3(false);
+  document.getElementById('btn-guardar').disabled = false;
+  document.getElementById('btn-modificar').disabled = false;
 }
 </script>
-
 </body>
 </html>
